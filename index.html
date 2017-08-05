@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang='en'>
+    <head>
+        <meta charset='utf-8'>
+        <meta http-equiv='x-ua-compatible' content='ie=edge'>
+        <title>My App</title>
+        <meta name='description' content='My App'>
+        <meta name='viewport' content='width=device-width, initial-scale=1'>
+		<link rel='stylesheet' type='text/css' href='css/normalize.css'>
+		<link rel='stylesheet' type='text/css' href='css/style.css'>
+		<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+		<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+		<script src="http://d3js.org/d3.v3.min.js"></script>
+		<script src="http://d3js.org/topojson.v0.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+    </head>
+	
+    <body>
+        <!--[if lt IE 8]>
+            <p class='browserupgrade'>You are using an <strong>outdated</strong> browser. Please <a href='http://browsehappy.com/'>upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+		<div id='main'>
+		
+			<div id='map'></div>
+			<div id='airport-data'>
+				<p>Rank: <span id='airport-rank'></p>
+				<p>City: <span id='airport-city'></p>
+				<p>Passengers: <span id='airport-pax'></p>
+				<p>Lattitude: <span id='airport-lat'></p>
+				<p>Longitude: <span id='airport-lon'></p>
+			</div>
+		</div>
+		
+		<script src='app.js'></script>
+    </body>
+	
+</html>
