@@ -1,0 +1,28 @@
+#main {
+	padding: 60px;
+}
+
+#map {
+	overflow: hidden;
+	width: 600px;
+	height: 600px;
+}
+
+#airport-data, #map {
+	display: inline-block;
+}
+
+#airport-data {
+	vertical-align: top;
+	margin-top: 150px;
+}
+
+path {
+  stroke: white;
+  stroke-width: 0.25px;
+  fill: grey;
+}
+.airport {
+	fill: red;
+	z-index: 999;
+}
