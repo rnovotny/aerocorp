@@ -23,6 +23,8 @@ path {
   fill: grey;
 }
 .airport {
+	cursor: pointer;
+	stroke-width: 0;
 	fill: red;
 	z-index: 999;
 }

@@ -18,6 +18,7 @@ $(document).ready(function(){
 					.attr('class', 'airport')
 					.attr('data-airport', JSON.stringify( data[i] ) )
 					.attr("d", path)
+					
 					.on('click', function(){
 						var airportData = $(this).data('airport')
 						$('#airport-rank').html(airportData.rank)
@@ -39,6 +40,7 @@ $(document).ready(function(){
 			  
 		svg.call(d3.behavior.zoom().on("zoom", function () {
 			svg.attr("transform", "scale(" + d3.event.scale + ")")
+			svg.selectAll("path").attr("d", path.pointRadius( 4.5 * ( 1 / d3.event.scale ) ) )
 		}))
 		
 		svg.call(d3.behavior.drag()
