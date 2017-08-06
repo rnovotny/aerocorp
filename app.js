@@ -1,5 +1,25 @@
 /* jshint asi: true */
 $(document).ready(function(){
+	
+	$('#new-route').click(function(){
+		var start = $('#airport-code').val()
+		
+		$('.airport').click(function(){
+			if ( $(this).attr('id') !== start ) {
+				var startAirport = $('#' + start ).data('airport')
+				var endAirport = $(this).data('airport')
+				
+				svg.append("path")
+					.datum({type: "LineString", coordinates: [[startAirport.lon, startAirport.lat], [endAirport.lon, endAirport.lat]]})
+					.attr('class', 'route')
+					.attr('id', startAirport.code + '-' + endAirport.code )
+				$('.airport').unbind('click')
+				svg.selectAll("path").attr("d", path)
+				
+			}
+		})
+	})
+	
 	var width = 600
 	var height = 600
 	var sens = 0.25
@@ -16,11 +36,14 @@ $(document).ready(function(){
 				svg.append("path")
 					.datum({type: "Point", coordinates: [data[i].lon, data[i].lat]})
 					.attr('class', 'airport')
+					.attr('title', data[i].code )
+					.attr('id', data[i].code )
 					.attr('data-airport', JSON.stringify( data[i] ) )
 					.attr("d", path)
 					
 					.on('click', function(){
 						var airportData = $(this).data('airport')
+						$('#airport-code').val(airportData.code)
 						$('#airport-rank').html(airportData.rank)
 						$('#airport-city').html(airportData.city)
 						$('#airport-pax').html(airportData.passengers)
@@ -43,15 +66,18 @@ $(document).ready(function(){
 			svg.selectAll("path").attr("d", path.pointRadius( 4.5 * ( 1 / d3.event.scale ) ) )
 		}))
 		
-		svg.call(d3.behavior.drag()
+		svg.call( d3.behavior.drag()
 			.origin(function() { var r = projection.rotate(); return {x: r[0] / sens, y: -r[1] / sens}; })
 			.on("drag", function() {
 				var rotate = projection.rotate()
 				projection.rotate([d3.event.x * sens, -d3.event.y * sens, rotate[2]])
 				svg.selectAll("path").attr("d", path)
-			}))
+			})
+		)
 	});
 	
-})
 	
+	
+})
+
 

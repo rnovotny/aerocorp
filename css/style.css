@@ -28,3 +28,9 @@ path {
 	fill: red;
 	z-index: 999;
 }
+.route {
+	fill: none;
+	z-index: 998;
+	stroke-width: 1px;
+	stroke: lightgreen;
+}
