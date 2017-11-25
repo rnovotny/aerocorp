@@ -3,8 +3,8 @@
     <head>
         <meta charset='utf-8'>
         <meta http-equiv='x-ua-compatible' content='ie=edge'>
-        <title>My App</title>
-        <meta name='description' content='My App'>
+        <title>AeroCorp</title>
+        <meta name='description' content='AeroCorp'>
         <meta name='viewport' content='width=device-width, initial-scale=1'>
 		<link rel='stylesheet' type='text/css' href='css/normalize.css'>
 		<link rel='stylesheet' type='text/css' href='css/style.css'>
@@ -22,6 +22,18 @@
 		<div id='main'>
 		
 			<div id='map'></div>
+			
+			<div id='route'>
+				<table id='route-table'>
+					<tr>
+						<th>Start</th><th>End</th><th>Distance</th>
+					</tr>
+					<tr>
+						<td id='route-start'></td><td id='route-end'></td><td id='route-distance'></td>
+					</tr>
+				</table>
+			</div>
+			
 			<div id='airport-data'>
 				<p><input type='text' id='airport-code' readonly></input></p>
 				<p>City: <span id='airport-city'></span></p>
@@ -31,6 +43,15 @@
 				<p>Longitude: <span id='airport-lon'></span></p>
 				<button type="button" id="new-route">New Route</button>
 			</div>
+			
+			<div id='planes'>		
+				<table id='planes-table'>
+					<tr>
+						<th>Model</th><th>Price</th><th>Speed</th><th>Range</th><th>PAX</th>
+					</tr>
+				</table>
+			</div>
+			
 		</div>
 		
 		<script src='app.js'></script>
