@@ -58,3 +58,7 @@ path {
 	stroke-width: 1px;
 	stroke: lightgreen;
 }
+
+.route.preview {
+	stroke: yellow;
+}

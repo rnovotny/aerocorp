@@ -21,6 +21,11 @@ function afterLoad() {
 		$( '#airport-pax' ).html( airportData.passengers )
 		$( '#airport-lat' ).html( airportData.lat )
 		$( '#airport-lon' ).html( airportData.lon )
+		
+		if ( openRoute ) {
+			
+			
+		}
 	})
 	
 }
@@ -42,26 +47,37 @@ function drawFlightTime( distance ) {
 	})
 }
 
+function resetRoute() {
+	$('#route-end').html( '' )
+	$('#route-start').html( '' )
+	$('#route-distance').html( '' )
+}
+
 function newRoute() {
-	
-	$('.airport').click(function(){
-		if ( $(this).attr('id') !== start ) {
-			var endAirport = $(this).data('airport')
-			svg.insert("path", '.airport')
-				.datum({type: "LineString", coordinates: [[startAirport.lon, startAirport.lat], [endAirport.lon, endAirport.lat]]})
-				.attr('class', 'route')
-				.attr('id', startAirport.code + '-' + endAirport.code )
-			$('.airport').unbind('click')
-			svg.selectAll("path").attr("d", path)
-		}
-	})
-	
 	openRoute = true
+	
 	var start = $('#airport-code').val()
 	startAirport = $( '#' + start ).data('airport')
 	$('#route-start').html( start )
 	
 	$('.airport').hover( function(){
+		var endAirport = $(this).data('airport')
+		
+		if ( $(this).attr('id') !== start && $('#' + startAirport.code + '-' + endAirport.code).length === 0 ) {
+			
+			var thisPath = svg.insert("path", '.airport')
+				.datum({type: "LineString", coordinates: [[startAirport.lon, startAirport.lat], [endAirport.lon, endAirport.lat]]})
+				.attr('class', 'route preview')
+				.attr('id', startAirport.code + '-' + endAirport.code )
+				svg.selectAll("path").attr("d", path)
+			
+			$(this).mouseleave( function( e ){ 
+				thisPath.remove()
+			})
+			
+		}
+		
+		
 		var hoverAirport = $(this).data('airport')
 		$('#route-end').html( hoverAirport.code )
 		var routeDist = haversineDistance( startAirport, hoverAirport )
@@ -78,6 +94,19 @@ function newRoute() {
 		})
 		
 	})	
+	
+	$('.airport').click(function(){
+		if ( $(this).attr('id') !== start ) {
+			var endAirport = $(this).data('airport')
+			svg.insert("path", '.airport')
+				.datum({type: "LineString", coordinates: [[startAirport.lon, startAirport.lat], [endAirport.lon, endAirport.lat]]})
+				.attr('class', 'route')
+				.attr('id', startAirport.code + '-' + endAirport.code )
+			svg.selectAll("path").attr("d", path)
+			resetRoute()
+			$('.airport').unbind('click mouseenter mouseleave')
+		}
+	})
 }
 
 
