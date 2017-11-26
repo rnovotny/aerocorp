@@ -31,6 +31,12 @@
 #planes-table {
 	text-align: center;
 }
+
+#planes-table tr.hasRange{
+	background-color: lightgreen;
+}
+
+
 #planes-table th {
 	width: 100px;
 }

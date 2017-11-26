@@ -8,35 +8,11 @@ var path = d3.geo.path().projection(projection)
 var svg = d3.select( '#map' ).append( 'svg' ).attr( 'width', width ).attr( 'height', height )
 var planes = loadPlanes()
 loadMap()
+var openRoute = false
 
 function afterLoad() {
-	$('#new-route').click(function(){
-		var start = $('#airport-code').val()
-		startAirport = $( '#' + start ).data('airport')
-		$('#route-start').html( start )
-		
-		$('.airport').hover( function(){
-			var hoverAirport = $(this).data('airport')
-			$('#route-end').html( hoverAirport.code )
-			var routeDist = haversineDistance( startAirport, hoverAirport )
-			$('#route-distance').html( routeDist )
-			$('#plane-table').removeClass('hasRange')
-		})
-		
-		$('.airport').click(function(){
-			if ( $(this).attr('id') !== start ) {
-				var endAirport = $(this).data('airport')
-				svg.insert("path", '.airport')
-					.datum({type: "LineString", coordinates: [[startAirport.lon, startAirport.lat], [endAirport.lon, endAirport.lat]]})
-					.attr('class', 'route')
-					.attr('id', startAirport.code + '-' + endAirport.code )
-				$('.airport').unbind('click')
-				svg.selectAll("path").attr("d", path)
-				
-			}
-		})
-	})
-
+	$('#new-route').click(newRoute) 
+	
 	$('.airport').on('mouseover click', function() {
 		var airportData = $(this).data( 'airport' )
 		$( '#airport-code' ).val( airportData.code )
@@ -49,10 +25,60 @@ function afterLoad() {
 	
 }
 
+function drawFlightTime( distance ) {
+	$('.plane-table-row').each( function() {
+		var planeID = $(this).data('plane-id')
+		var thisPlane = planes[planeID]
+		
+		if ( Number( thisPlane.range ) >=  Number( distance ) ) {
+			var duration = 1 + ( distance / ( thisPlane.speed * 666.739 ) ) //MACH TO NAUTICAL MILE
+			var hours = Math.floor( duration )
+			var minutes = 60 * ( duration - hours )
 
+			$(this).find('.route-duration').html( hours + ' hr ' + minutes.toFixed(0) + ' min' )
+		} else {
+			$(this).find('.route-duration').html('-')
+		}
+	})
+}
 
+function newRoute() {
 	
-
+	$('.airport').click(function(){
+		if ( $(this).attr('id') !== start ) {
+			var endAirport = $(this).data('airport')
+			svg.insert("path", '.airport')
+				.datum({type: "LineString", coordinates: [[startAirport.lon, startAirport.lat], [endAirport.lon, endAirport.lat]]})
+				.attr('class', 'route')
+				.attr('id', startAirport.code + '-' + endAirport.code )
+			$('.airport').unbind('click')
+			svg.selectAll("path").attr("d", path)
+		}
+	})
+	
+	openRoute = true
+	var start = $('#airport-code').val()
+	startAirport = $( '#' + start ).data('airport')
+	$('#route-start').html( start )
+	
+	$('.airport').hover( function(){
+		var hoverAirport = $(this).data('airport')
+		$('#route-end').html( hoverAirport.code )
+		var routeDist = haversineDistance( startAirport, hoverAirport )
+		drawFlightTime( routeDist )
+		$('#route-distance').html( routeDist )
+		$('.plane-table-row').removeClass('hasRange')
+		$('.plane-table-row').each( function() {
+			var planeID = $(this).data('plane-id')
+			var thisPlane = planes[planeID]
+			
+			if ( Number( thisPlane.range ) >= Number( routeDist ) ) {
+				$(this).addClass('hasRange')
+			}
+		})
+		
+	})	
+}
 
 
 function loadMap() {
@@ -104,12 +130,21 @@ function loadPlanes() {
 		
 		for ( var i = 0; i < data.length; i++ ) {
 			planes[i] = data[i]
-			var html = '<tr><td>'+data[i].model+'</td><td>'+data[i].price+'</td><td>'+data[i].speed+'</td><td>'+data[i].range+'</td><td>'+data[i].pax+'</td></tr>'
+			var html = "<tr class='plane-table-row' data-plane-id='" + i + "'>" + 
+				"<td>"+data[i].model+"</td>" + 
+				"<td>"+data[i].price+"</td>" + 
+				"<td>"+data[i].speed+"</td>" + 
+				"<td>"+data[i].range+"</td>" + 
+				"<td>"+data[i].pax+"</td>" + 
+				"<td class='route-duration'>-</td>" + 
+			"</tr>"
 			$('#planes-table').append( html )
 		}
 	})
 	return planes
 }
+
+
 
 function haversineDistance( coords1, coords2 ) {
 	function toRad(x) {
