@@ -21,19 +21,14 @@
 
 		<div id='main'>
 		
-			<div id='map'></div>
-			
-			<div id='route'>
-				<button type="button" id="new-route">New Route</button>
-				<table id='route-table'>
+			<div id='planes'>		
+				<table id='planes-table'>
 					<tr>
-						<th>Start</th><th>End</th><th>Distance</th>
-					</tr>
-					<tr>
-						<td id='route-start'></td><td id='route-end'></td><td id='route-distance'></td><td id='route-duration'></td>
+						<th>Model</th><th>Price</th><th>Speed</th><th>Range</th><th>PAX</th><th>Route Cost</th><th>Time</th>
 					</tr>
 				</table>
 			</div>
+			<div id='map'></div>
 			
 			<div id='airport-data'>
 				<p><input type='text' id='airport-code' readonly></input></p>
@@ -44,14 +39,25 @@
 				<p>Longitude: <span id='airport-lon'></span></p>
 				
 			</div>
-			
-			<div id='planes'>		
-				<table id='planes-table'>
+			<br>
+			<div id='route'>
+				<button type="button" id="new-route">New Route</button><br>
+				<label>Fuel Cost:<input id='fuel-cost' type='number' value='1.80' step='0.01' min='0'></input></label>
+				
+				<table id='route-table'>
 					<tr>
-						<th>Model</th><th>Price</th><th>Speed</th><th>Range</th><th>PAX</th><th>Time</th>
+						<th>Start</th><th>End</th><th>Distance</th>
+					</tr>
+					<tr>
+						<td id='route-start'></td><td id='route-end'></td><td id='route-distance'></td><td id='route-duration'></td>
 					</tr>
 				</table>
 			</div>
+			
+
+			
+			
+			
 			
 		</div>
 		

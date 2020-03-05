@@ -36,13 +36,20 @@ function drawFlightTime( distance ) {
 		var thisPlane = planes[planeID]
 		
 		if ( Number( thisPlane.range ) >=  Number( distance ) ) {
-			var duration = 1 + ( distance / ( thisPlane.speed * 666.739 ) ) //MACH TO NAUTICAL MILE
+			var duration = 1 + ( distance / ( thisPlane.speed * 666.739 ) ) //MACH TO NAUTICAL MILE, 1 HOUR ADDED FOR TAKEOFF & LANDING
 			var hours = Math.floor( duration )
 			var minutes = 60 * ( duration - hours )
+			
+			var burn = duration * thisPlane.burn
+			var fuelCostPerLiter = $('#fuel-cost').val() / 3.78541178 
+			//KILOGRAMS OF BURN INTO LITERS TIMES COST PER LITER
+			var cost = burn * 1.266 * fuelCostPerLiter
 
 			$(this).find('.route-duration').html( hours + ' hr ' + minutes.toFixed(0) + ' min' )
+			$(this).find('.route-cost').html( '$' + cost.toFixed(0) )
 		} else {
 			$(this).find('.route-duration').html('-')
+			$(this).find('.route-cost').html('-')
 		}
 	})
 }
@@ -165,6 +172,7 @@ function loadPlanes() {
 				"<td>"+data[i].speed+"</td>" + 
 				"<td>"+data[i].range+"</td>" + 
 				"<td>"+data[i].pax+"</td>" + 
+				"<td class='route-cost'>-</td>" + 
 				"<td class='route-duration'>-</td>" + 
 			"</tr>"
 			$('#planes-table').append( html )
